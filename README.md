@@ -1,7 +1,7 @@
 PAX_Pinger
 ==========
 
-Just a stupid little python script to ping twitter and the PAX site to watch for changes.
+Just a stupid little python script to ping twitter and the PAX site to watch for changes.  There's a lot of cringey stuff that goes on in this file (hardcoded, non-external API key, anyone?) but it's just for personal use so whatever.
 
 Uses <a href="https://pypi.python.org/pypi/twitter#downloads">this twitter library.</a>
 
