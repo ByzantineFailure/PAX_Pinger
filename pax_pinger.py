@@ -14,8 +14,11 @@ CONSUMER_SECRET="API_SECRET";
  
 t_obj = Twitter( auth=OAuth(OAUTH_TOKEN, OAUTH_SECRET,
                               CONSUMER_KEY, CONSUMER_SECRET));
- 
+
+#Hardcoded last tweet ID?  Hardcoded last tweet ID.
+#Whatever, it'll update itself if a new one pops up.
 Last_Tweet_ID = 467354116139020288;
+
 gmail_user = 'EMAIL'
 phone_number = 'PHONE_NUMBER'
 gmail_pwd = 'GMAIL_PASSWORD'
