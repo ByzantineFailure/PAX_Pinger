@@ -1,8 +1,6 @@
 import os
 from xml.etree.ElementTree import ElementTree
 
-CONFIGURATION_PATH="configuration.xml"
-
 def getConfiguration(configurationPath):
         tree = ElementTree();
         tree.parse(configurationPath);
