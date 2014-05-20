@@ -1,0 +1,33 @@
+<data>
+
+	<TwitterAuthDetails>
+
+		<API_Key>API_KEY</API_Key>
+
+		<API_Secret>API_SECRET</API_Secret>
+
+		<AppName>PAX_Pinger</AppName>
+
+		
+    <!-- Leave these two blank to do the OAuth dance -->
+		<OAuthToken></OAuthToken> 
+
+		<OAuthSecret></OAuthSecret> 
+
+	</TwitterAuthDetails>
+
+	<ContactDetails>
+
+		<User>GMAIL_ADDRESS/User>
+
+		
+    <!-- Super secure right here -->
+		<Password>GMAIL_PASSWORD</Password>
+
+		<PhoneNumber>PHONE_NUMBER</PhoneNumber>
+
+		<TextEmailServer>PHONE_SERVICE_TEXT_SERVICE_EMAIL</TextEmailServer>
+
+	</ContactDetails>
+
+</data>
