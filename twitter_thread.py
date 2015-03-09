@@ -54,4 +54,4 @@ class TwitterThread(threading.Thread):
                         except:
                                sys.stdout.write(traceback.format_exc() + '\n');
                                send_email(self.contact, 'PAX_Pinger failed!');
-                               break;
+                               raise;
