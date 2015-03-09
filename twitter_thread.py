@@ -9,14 +9,21 @@ import os
 PAX_TWITTER_ACCOUNT = "Official_PAX"
 
 class TwitterThread(threading.Thread):
-        def __init__(self, oauth_location, config_location):
-                config = getConfiguration(config_location);
+        def __init__(self, oauth_location, config_location, config):
+                #Retreive configuration values
                 self.auth = config['auth'];
                 self.contact = config['contact'];
+
+                self.stop = False;
+
+                #Do the OAuth dance if we don't have these values already
                 if(not self.auth['OAuthToken'] or not self.auth['OAuthSecret']):
                         self.perform_and_store_oauth_dance(self.auth, config['auth']['AppName'], oauth_location, config_location);
-                self.create_twitter_object();
+
+                #Create twitter objects and get id to stream from
+                self.create_twitter_objects();
                 self.pax_id = self.rest_obj.users.lookup(screen_name=PAX_TWITTER_ACCOUNT)[0]['id'];
+                threading.Thread.__init__(self);
 
         def perform_and_store_oauth_dance(self, auth, app_name, oauth_location, config_location):
                 oauth_dance(app_name, auth['API_Key'], auth['API_Secret'],
@@ -28,7 +35,10 @@ class TwitterThread(threading.Thread):
 
         def start_stream(self):
                 for msg in self.stream_obj.statuses.filter(follow=self.pax_id):
-                        sys.stdout.write("NEW TWEET: {0}".format(msg['text']));
+                        if (self.stop):
+                                raise Exception("Stopping from sentinel!");
+
+                        sys.stdout.write("NEW TWEET: {0}\n".format(msg['text']));
                         tries = 0
                         #Try sending the email until we succeed or until we've tried 5 times
                         while send_email(self.contact, 'NEW TWEET: {0}'.format(msg['text'])) < 0:
@@ -38,20 +48,31 @@ class TwitterThread(threading.Thread):
                                 continue;
                         
         
-        def create_twitter_object(self):
+        def create_twitter_objects(self):
                 self.rest_obj = Twitter( auth=OAuth(self.auth['OAuthToken'], self.auth['OAuthSecret'],
                                self.auth['API_Key'], self.auth['API_Secret']));
                 self.stream_obj = TwitterStream(auth=OAuth(self.auth['OAuthToken'], self.auth['OAuthSecret'],
                                                            self.auth['API_Key'], self.auth['API_Secret']),
                                                 domain='stream.twitter.com');
+        
+        def stop(self):
+                sys.stdout.write("Received stop!");
+                self.stop = True;
+
+        def isAlive(self):
+                return (not self.stop);
 
         def run(self):
-                while(True):
+                while(not self.stop):
                         try:
                                self.start_stream();
+                        #Twitter Stream has failed in some way.  Respawn.
                         except StopIteration:
-                               self.create_twitter_object();
+                               self.create_twitter_objects();
+                        #Some other failure.  Notify the user and rethrow.
+                        #The email may be factored up to the parent thread in the future.
                         except:
                                sys.stdout.write(traceback.format_exc() + '\n');
                                send_email(self.contact, 'PAX_Pinger failed!');
+                               self.stop = True;
                                raise;
