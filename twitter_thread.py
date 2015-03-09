@@ -6,7 +6,7 @@ import traceback
 import sys
 import os
 
-PAX_TWITTER_ACCOUNT = "TweetSQLAtMeTes"
+PAX_TWITTER_ACCOUNT = "Official_PAX"
 
 class TwitterThread(threading.Thread):
         def __init__(self, oauth_location, config_location):
@@ -49,6 +49,9 @@ class TwitterThread(threading.Thread):
                 while(True):
                         try:
                                self.start_stream();
+                        except StopIteration:
+                               self.create_twitter_object();
                         except:
                                sys.stdout.write(traceback.format_exc() + '\n');
-                               self.create_twitter_object();
+                               send_email(self.contact, 'PAX_Pinger failed!');
+                               break;
