@@ -6,7 +6,7 @@ import traceback
 import sys
 import os
 
-PAX_TWITTER_ACCOUNT = "TweetSQLAtMeTes"
+PAX_TWITTER_ACCOUNT = "official_pax"
 
 class TwitterThread(threading.Thread):
         def __init__(self, oauth_location, config_location, config):
