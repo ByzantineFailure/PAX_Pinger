@@ -43,7 +43,7 @@ try:
                 #failure/overall failure and exception handling and user notification
                 except:
                         sys.stdout.write(traceback.format_exc() + '\n');
-                        #send_email(configuration['contact'], "PAX_Pinger failed!");
+                        send_email(configuration['contact'], "PAX_Pinger failed!");
                         sys.exit("Exited due to exception.");
 #Only fires if the threads fail to start
 except:
