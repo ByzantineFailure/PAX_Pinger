@@ -13,16 +13,25 @@ You'll need your own twitter API key.  And stuff.
 
 #Configuration Details
 APIKey:  The API Key you will use to run this application.  Not provided.
+
 APISecret:  The API Secret.  Not provided.
-AppName  Whatever the name you registered this app under with twitter is.  Provided, but you can modify.
+
+AppName:  Whatever the name you registered this app under with twitter is.  Provided, but you can modify.
+
 
 OAuthKey:  Will be automatically populated by the OAUTH dance.  Do not fill in this value.
+
 OAuthSecret:  Will be automatically populated by the OAUTH dance.  Do not fill in this value.
 
+
 User:  The email address you will be sending the text notifications from.  This application assumes GMail and is not guaranteed to work with other email providers.
+
 Password:  The password for the account, plaintext.  This is not secure, but I'm lazy and don't want to figure out how to do it right.
 
+
 PhoneNumber:  The phone number you are sending the text to.
+
 TextEmailServer: The email address ending, including "@" that your provider uses.
+
 
 Phone Number and TextEmailServer are dependent upon your provider, but are concatenated together to create a single email address to send the email to.
