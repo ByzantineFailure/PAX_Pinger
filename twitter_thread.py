@@ -39,6 +39,10 @@ class TwitterThread(threading.Thread):
                                 raise Exception("Stopping from sentinel!");
 
                         sys.stdout.write("NEW TWEET: {0}\n".format(msg['text']));
+                        if(msg['user']['screen_name'].lower() != PAX_TWITTER_ACCOUNT.lower()):
+                                sys.stdout.write("Continuing -- not a tweet from official_pax\n");
+                                sys.stdout.flush();
+                                continue;
                         tries = 0
                         #Try sending the email until we succeed or until we've tried 5 times
                         while send_email(self.contact, 'NEW TWEET: {0}'.format(msg['text'])) < 0:
