@@ -2,6 +2,7 @@ from twitter import *
 from configuration_reader import *
 from send_operations import *
 import threading
+import pprint
 import traceback
 import sys
 import os
@@ -37,6 +38,15 @@ class TwitterThread(threading.Thread):
                 for msg in self.stream_obj.statuses.filter(follow=self.pax_id):
                         if (self.stop):
                                 raise Exception("Stopping from sentinel!");
+                        
+                        #Twitter stream hangup
+                        if('hangup' in msg and msg['hangup']):
+                                raise StopIteration("Found Hangup in twitter stream!");
+
+                        if('text' not in msg):
+                                sys.stdout.write("text not found in tweet!  Tweet was:\n");
+                                pprint.pprint(msg);
+                                continue;
 
                         sys.stdout.write("NEW TWEET: {0}\n".format(msg['text']));
                         if(msg['user']['screen_name'].lower() != PAX_TWITTER_ACCOUNT.lower()):
@@ -60,7 +70,7 @@ class TwitterThread(threading.Thread):
                                                 domain='stream.twitter.com');
         
         def stop(self):
-                sys.stdout.write("Received stop!");
+                sys.stdout.write("Received stop!\n");
                 self.stop = True;
 
         def isAlive(self):
@@ -72,6 +82,7 @@ class TwitterThread(threading.Thread):
                                self.start_stream();
                         #Twitter Stream has failed in some way.  Respawn.
                         except StopIteration:
+                               sys.stdout.write("StopIteration found (probably a hangup.  Respawning...\n");
                                self.create_twitter_objects();
                         #Some other failure.  Notify the user and rethrow.
                         #The email may be factored up to the parent thread in the future.
