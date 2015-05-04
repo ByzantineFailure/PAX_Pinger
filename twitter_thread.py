@@ -7,7 +7,8 @@ import traceback
 import sys
 import os
 
-PAX_TWITTER_ACCOUNT = "official_pax"
+#PAX_TWITTER_ACCOUNT = "official_pax"
+PAX_TWITTER_ACCOUNT = "TweetSqlAtMeTes"
 
 class TwitterThread(threading.Thread):
         def __init__(self, oauth_location, config_location, config):
@@ -47,15 +48,17 @@ class TwitterThread(threading.Thread):
                                 sys.stdout.write("text not found in tweet!  Tweet was:\n");
                                 pprint.pprint(msg);
                                 continue;
+                        
+                        printableMessage = msg['text'].encode('utf-8');
 
-                        sys.stdout.write("NEW TWEET: {0}\n".format(msg['text']));
+                        sys.stdout.write("NEW TWEET: {0}\n".format(printableMessage));
                         if(msg['user']['screen_name'].lower() != PAX_TWITTER_ACCOUNT.lower()):
                                 sys.stdout.write("Continuing -- not a tweet from official_pax\n");
                                 sys.stdout.flush();
                                 continue;
                         tries = 0
                         #Try sending the email until we succeed or until we've tried 5 times
-                        while send_email(self.contact, 'NEW TWEET: {0}'.format(msg['text'])) < 0:
+                        while send_email(self.contact, 'NEW TWEET: {0}'.format(printableMessage)) < 0:
                                 if(tries > 4):
                                         break;
                                 tries = tries + 1;
