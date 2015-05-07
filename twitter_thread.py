@@ -2,7 +2,6 @@ from twitter import *
 from configuration_reader import *
 from send_operations import *
 import threading
-import pprint
 import traceback
 import sys
 import os
@@ -39,7 +38,7 @@ class TwitterThread(threading.Thread):
                 for msg in self.stream_obj.statuses.filter(follow=self.pax_id):
                         if (self.stop):
                                 raise Exception("Stopping from sentinel!");
-                        
+                
                         #Twitter stream hangup
                         if('hangup' in msg and msg['hangup']):
                                 raise StopIteration("Found Hangup in twitter stream!");
@@ -49,16 +48,15 @@ class TwitterThread(threading.Thread):
                                 pprint.pprint(msg);
                                 continue;
                         
-                        printableMessage = msg['text'].encode('utf-8');
 
-                        sys.stdout.write("NEW TWEET: {0}\n".format(printableMessage));
+                        sys.stdout.write("NEW TWEET: {0}\n".format(msg['text'].encode('utf-8')));
                         if(msg['user']['screen_name'].lower() != PAX_TWITTER_ACCOUNT.lower()):
                                 sys.stdout.write("Continuing -- not a tweet from official_pax\n");
                                 sys.stdout.flush();
                                 continue;
                         tries = 0
                         #Try sending the email until we succeed or until we've tried 5 times
-                        while send_email(self.contact, 'NEW TWEET: {0}'.format(printableMessage)) < 0:
+                        while send_email(self.contact, 'NEW TWEET: {0}'.format(msg['text'].encode('utf-8'))) < 0:
                                 if(tries > 4):
                                         break;
                                 tries = tries + 1;
@@ -73,7 +71,7 @@ class TwitterThread(threading.Thread):
                                                 domain='stream.twitter.com');
         
         def stop(self):
-                sys.stdout.write("Received stop!\n");
+                sys.stdout.write("Received stop!");
                 self.stop = True;
 
         def isAlive(self):
@@ -85,7 +83,6 @@ class TwitterThread(threading.Thread):
                                self.start_stream();
                         #Twitter Stream has failed in some way.  Respawn.
                         except StopIteration:
-                               sys.stdout.write("StopIteration found (probably a hangup.  Respawning...\n");
                                self.create_twitter_objects();
                         #Some other failure.  Notify the user and rethrow.
                         #The email may be factored up to the parent thread in the future.
