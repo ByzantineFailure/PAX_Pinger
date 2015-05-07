@@ -11,6 +11,9 @@ Initial version done last year over a few days of waiting and mutual boredom in 
 
 You'll need your own twitter API key.  And stuff.
 
+#TODOs for Next Year
+Ensure the application will continue to try to respawn in the event of a network failure.  This almost caused me to miss 2015's tickets!
+
 #Configuration Details
 APIKey:  The API Key you will use to run this application.  Not provided.
 
