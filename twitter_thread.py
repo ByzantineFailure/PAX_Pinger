@@ -6,8 +6,8 @@ import traceback
 import sys
 import os
 
-#PAX_TWITTER_ACCOUNT = "official_pax"
-PAX_TWITTER_ACCOUNT = "TweetSqlAtMeTes"
+PAX_TWITTER_ACCOUNT = "official_pax"
+#PAX_TWITTER_ACCOUNT = "ByzantineFail"
 
 class TwitterThread(threading.Thread):
         def __init__(self, oauth_location, config_location, config):
@@ -78,6 +78,7 @@ class TwitterThread(threading.Thread):
                 return (not self.stop);
 
         def run(self):
+                print("Starting twitter thread...");
                 while(not self.stop):
                         try:
                                self.start_stream();
